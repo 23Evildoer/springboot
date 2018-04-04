@@ -24,6 +24,6 @@ public class CarController {
             customType.setCode(200);
             customType.setMessage("查询成功");
         }
-        return new ResponseEntity<>(customType, HttpStatus.OK);
+        return new ResponseEntity<>(cars, HttpStatus.OK);
     }
 }
