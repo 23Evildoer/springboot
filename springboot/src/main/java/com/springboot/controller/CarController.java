@@ -16,6 +16,7 @@ public class CarController {
     @Autowired
     private CarService carService;
 
+
     @RequestMapping("car_list")
     public ResponseEntity<?> hello(){
         CustomType customType = new CustomType(400,"查无此数据");
@@ -26,4 +27,6 @@ public class CarController {
         }
         return new ResponseEntity<>(cars, HttpStatus.OK);
     }
+
+
 }

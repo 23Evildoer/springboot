@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thyemleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>hithymeleaf</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container">
+    <h1>Thymeleaf:Spring Boot自带的前端模版</h1>
+
+    <h1>标签常用方法</h1>
+    <h3>赋值+字符串拼接</h3>
+    <p th:text="${car.name}">车名</p>
+    <span th:text="'车的传奇：'+${car.name}+'!'"></span><br><br>
+
+
+    <h5>字符串拼接简洁的写法</h5>
+    <span th:text="|车的传奇：${car.name}|"></span><br><br>
+
+    <h3>条件判断 if/Unless</h3>
+    <span th:if="${car.price==8888}">8989恰好</span>
+    <span th:unless="${car.price==8980}">8980太贵</span><br><br>  <!-- price 不相等 8980 条件成立 输出-->
+
+    <h3>循环</h3>
+    <table class="table table-striped table-hover">
+        <tr>
+            <th>NO.</th>
+            <th>车名</th>
+            <th>价格</th>
+            <th>生产日期</th>
+        </tr>
+        <tr th:each="car :${cars}">  <!--循环这里的car 是自定义的 随意定义成什么-->
+            <td th:text="${car.id}">ID</td>
+            <td th:text="${car.name}">车名</td>
+            <td th:text="${#numbers.formatDecimal(car.price, 1, 2)}">价格</td>
+            <td th:text="${#dates.format(car.createDate, 'yyyy-MM-dd')}">生产日期</td>
+        </tr>
+    </table>
+    <br><br>
+
+    <h3>标准表达式</h3>
+    <h3>变量表达式</h3>
+    <!-- session 作用域   request 作用域 -->
+    <p th:text="|session:${session.car.name} request:${car.name}|"></p><br><br>
+
+    <h3>选择(星号)表达式</h3>
+    <span th:text="*{car.name}"></span>
+    <div th:object="${car}">
+        <span th:text="*{price}"/>
+    </div>
+    <br><br>
+
+    <h3>url 表达式</h3>
+    <a href="hithymeleaf">原生(默认的写法)</a><br><!-- 默认的写法 -->
+    <a href="hithymeleaf?name=jack">原生带参(默认的写法)</a><br>
+    <a href="hithymeleaf?name=jack&price=120">原生带参(默认的写法)</a><br>
+
+    <a th:href="@{/hithymeleaf}">Hello Thymeleaf</a><br>
+    <a th:href="@{/hithymeleaf(name=${car.name})}">Hello Thymeleaf</a><br>
+    <a th:href="@{/hithymeleaf(name=${car.name},price=120)}">Hello Thymeleaf</a><br>
+
+    <h3>文字国际化表达式</h3>
+    <p th:text="#{welcome}"></p>
+
+    <li id="i18n">
+        <th:block th:if="${#locale.getCountry().equals('US')}">
+            <a th:attr="href='/carlist?locale=zh_CN'" th:text="#{lang_zh}"></a>
+        </th:block>
+        <th:block th:if="${#locale.getCountry().equals('CN')}">
+            <a th:attr="href='/carlist?locale=en_US'" th:text="#{lang_en}"></a>
+        </th:block>
+    </li>
+
+</div>
+
+<h1>布局</h1>
+<!-- footer:被包含的文件名;copy是被包含文件中的 fragment 名 -->
+<div th:include="footer :: copy"></div>
+<div th:replace="footer :: copy"></div>
+</body>
+</html>
