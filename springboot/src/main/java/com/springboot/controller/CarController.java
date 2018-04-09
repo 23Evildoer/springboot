@@ -4,27 +4,38 @@ import com.springboot.domain.Car;
 import com.springboot.domain.CustomType;
 import com.springboot.service.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http//127.0.0.1:8080",maxAge = 3600)
 public class CarController {
 
     @Autowired
     private CarService carService;
 
-    /**
-     *  查询所有
+     /**
+     *  查询所有  http://127.0.0.1:8086/ssm/api/cars
+     *  条件查询 http://127.0.0.1:8086/ssm/api/cars?name=x&beginDate=x&endDate=x
      * @return
      */
     @RequestMapping(value = "/cars",method = RequestMethod.GET)
-    public ResponseEntity<?> list(){
+    public ResponseEntity<?> list(
+            @RequestParam(value = "username", required = false) String username,
+            @RequestParam(value = "beginDate", required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd") Date beginDate,
+            @RequestParam(value = "endDate", required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate
+    ){
+        System.out.println("接受到的值："+username+" "+beginDate+" "+endDate);
         CustomType customType = new CustomType(400,"没有匹配的结果");
-        List<Car> cars = carService.list();
+        List<Car> cars = carService.findByParam(username, beginDate, endDate);
         if (cars!=null){
             customType.setCode(200);
             customType.setMessage("查询成功");
@@ -33,7 +44,7 @@ public class CarController {
     }
 
     /**
-     *  根据 id 查询
+     *  根据 id 查询 http://127.0.0.1:8086/ssm/api/cars/10
      * @param id
      * @return
      */
@@ -67,7 +78,7 @@ public class CarController {
     }
 
     /**
-     *  修改
+     *  修改  http://127.0.0.1:8086/ssm/api/cars
      * @param car
      * @return
      */
@@ -83,6 +94,11 @@ public class CarController {
         return new ResponseEntity<>(new CustomType(200,"修改成功"), HttpStatus.OK);
     }
 
+    /**
+     *  删除 http://127.0.0.1:8086/ssm/api/cars/10
+     * @param id
+     * @return
+     */
     @RequestMapping(value = "/cars/{id}",method = RequestMethod.DELETE)
     public  ResponseEntity<?> remove(
             @PathVariable("id")Integer id

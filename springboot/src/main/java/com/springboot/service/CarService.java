@@ -66,4 +66,15 @@ public class CarService {
     public int remove(Integer id){
         return carMapper.remove(id);
     }
+
+    /**
+     *  根据条件查询
+     * @param name
+     * @param beginDate
+     * @param endDate
+     * @return
+     */
+    public List<Car>findByParam(String name,Date beginDate,Date endDate){
+        return carMapper.findByParam(name,beginDate,endDate);
+    }
 }

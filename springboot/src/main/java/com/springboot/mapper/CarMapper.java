@@ -1,11 +1,9 @@
 package com.springboot.mapper;
 
 import com.springboot.domain.Car;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,4 +24,9 @@ public interface CarMapper {
 
     @Delete("delete from car where id=#{id}")
     int remove(Integer id);
+
+    List<Car> findByParam(
+            @Param("name") String name,
+            @Param("beginDate") Date beginDate,
+            @Param("endDate") Date endDate);
 }
